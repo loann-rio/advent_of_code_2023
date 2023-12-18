@@ -22,7 +22,95 @@ void Day15::Part2()
 {
     vector<string> inputs = readData();
     int result = 0;
-    map<int, vector<string>> boxes;
+    map<int, vector<tuple<string, int>>> boxes;
+
+    for (string val : inputs)
+    {
+
+        cout << "val : " << val << endl;
+        // split inputs
+        int ID = min(val.find('='), val.find('-'));
+        bool isEqual = (val.find('=') == ID);
+
+        int HashVal = 0;
+
+        for (const char& c : val.substr(0, ID)) { HashVal = ((HashVal + int(c)) * 17) % 256; }
+
+        cout << "is equal = " << isEqual << endl;
+        if (isEqual)
+        {
+            cout << "add " << val << " to box " << HashVal << endl;
+            //boxes[ValResult][val.substr(0, ID)] = stoi(val.substr(ID + 1));
+            if (boxes.find(HashVal) == boxes.end())
+            {
+                cout << "vect does not exist \n";
+                boxes[HashVal] = vector<tuple<string, int>>();
+            }
+
+            auto it = boxes[HashVal].begin();
+            while (it != boxes[HashVal].end())
+            {
+                if (get<0>(*it) == val.substr(0, ID))
+                {
+                    cout << "modify the value\n";
+                    (*it) = tuple<string, int>{ get<0>(*it), stoi(val.substr(ID+1)) };
+                    break;
+                }
+
+                it++;
+            }
+            if (it == boxes[HashVal].end())
+            {
+                cout << "add the value\n";
+                cout << val.substr(0, ID) << endl;
+                cout << stoi(val.substr(ID+1)) << endl;
+                boxes[HashVal].push_back(tuple<string, int>{ val.substr(0, ID), stoi(val.substr(ID+1)) });
+            }
+        }
+        else
+        {
+            cout << "remove : " << val << " from box " << HashVal << endl;
+            if (boxes.find(HashVal) != boxes.end())
+            {
+                auto it = boxes[HashVal].begin();
+                while (it != boxes[HashVal].end())
+                {
+                    if (get<0>(*it) == val.substr(0, ID))
+                    {
+                        cout << "remove\n";
+                        boxes[HashVal].erase(it);
+                        break;
+                    }
+                    it++;
+                }
+
+            }
+            cout << "done removing\n";
+        }
+
+        cout << "boxes : \n" << endl;
+
+        for (map<int, vector<tuple<string, int>>>::iterator iter = boxes.begin(); iter != boxes.end(); ++iter)
+        {
+            for (tuple<string, int> vals : iter->second)
+            {
+                cout << "boxe : " << iter->first << " , val = " << get<0>(vals) << " " << get<1>(vals) << endl;
+            }
+        }
+
+        cout << " " << endl;
+
+    }
+
+
+}
+
+
+/*void Day15::Part2()
+{
+    vector<string> inputs = readData();
+    int result = 0;
+    map<int, map<string, int>> boxes;
 
     for (string val : inputs)
     {
@@ -83,7 +171,7 @@ void Day15::Part2()
         cout << "hh\n";
     }
     cout << result << "\n";
-}
+}*/
 
 
 
