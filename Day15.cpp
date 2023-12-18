@@ -22,7 +22,7 @@ void Day15::Part2()
 {
     vector<string> inputs = readData();
     int result = 0;
-    map<int, map<string, int>> boxes;
+    map<int, vector<string>> boxes;
 
     for (string val : inputs)
     {
@@ -51,6 +51,20 @@ void Day15::Part2()
                 cout << "remove " << val << " to box " << ValResult << endl;
             }
         }
+        cout << "_______\n";
+        for (std::map<int, map<string, int>>::iterator iter = boxes.begin(); iter != boxes.end(); ++iter)
+        {
+            int k = iter->first;
+            cout << k << endl;
+            map<string, int> v = iter->second;
+
+            for (map<string, int>::iterator VectIt = v.begin(); VectIt != v.end(); VectIt++)
+            {
+                cout << "key second = " << VectIt->first;
+                cout << " val second  " << VectIt->second << endl;
+            }
+        }
+        cout << "_______\n";
         cout <<  ValResult << "\n";
     }
 
@@ -64,8 +78,9 @@ void Day15::Part2()
         {
             cout << "key second = " << VectIt->first << endl;
             result += (k+1) * distance(VectIt, v.begin()) * VectIt->second;
-            cout << "re = " << (k + 1) << " " << distance(VectIt, v.begin()) << " " << VectIt->second << endl;
+            //cout << "re = " << (k + 1) << " " << distance(VectIt, v.begin()) << " " << VectIt->second << endl;
         }
+        cout << "hh\n";
     }
     cout << result << "\n";
 }
